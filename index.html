@@ -37,7 +37,8 @@
         /* === SCROLL REVEAL (DUA ARAH) === */
         .anim-wrapper {
             opacity: 0;
-            transform: scale(0.6) translateY(60px);
+            /* Perubahan skala dari 0.6 ke 0.8 agar kalkulasi bounding box observer lebih stabil dan tidak glitch */
+            transform: scale(0.8) translateY(50px);
             transition: opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
                         transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             will-change: opacity, transform;
@@ -102,6 +103,7 @@
         .avatar-card { display: flex; align-items: center; gap: 1rem; background: #fff; padding: 0.75rem; border: 3px solid #000; border-radius: 8px; box-shadow: 4px 4px 0px #000; margin-bottom: 0.75rem; transition: transform 0.1s; }
         .avatar-card:hover { transform: translateX(4px); box-shadow: 2px 2px 0px #000; }
         .avatar-img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #000; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
+        .dept-badge { font-family: 'Bangers', cursive; padding: 2px 12px; border-bottom: 4px solid #000; border-right: 4px solid #000; display: inline-block; font-size: 1.25rem; letter-spacing: 1px; border-top-left-radius: 4px; }
 
         /* === DASHBOARD CHAT BUBBLES === */
         .chat-container { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -268,14 +270,14 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 shrink-0">
                 <div class="anim-wrapper brutal-box-lg bg-[#ff3366] text-white p-6 relative flex flex-col justify-center items-center">
-                    <div class="comic-pop font-comic transform rotate-6 -top-3 -right-3 !bg-[#c1ff72] !text-black text-sm">MARK YOUR CALENDAR!</div>
+                    <div class="comic-pop font-comic transform rotate-6 -top-3 -right-3 !bg-[#c1ff72] !text-black text-sm">AGENDA PELAKSANAAN!</div>
                     <div class="text-center w-full bg-black border-2 border-white p-3 mb-3 shadow-[4px_4px_0px_#fff]"><h3 class="font-comic text-2xl text-[#ffde59] tracking-widest">WAKTU</h3><p class="font-black text-xl mt-1">28 MEI 2026</p></div>
                     <div class="text-center w-full bg-black border-2 border-white p-3 shadow-[4px_4px_0px_#fff]"><h3 class="font-comic text-2xl text-[#00e5ff] tracking-widest">LOKASI</h3><p class="font-black text-xl mt-1">RUANG 1203</p></div>
                 </div>
                 <div class="anim-wrapper brutal-box-lg bg-[#ffde59] p-6 md:col-span-2 relative flex flex-col justify-center">
                     <div class="comic-pop font-comic transform -rotate-6 -bottom-3 -right-3 !bg-[#000] !text-white">JOIN THE BATTLE!</div>
                     <h2 class="font-comic text-4xl mb-4 bg-white px-3 py-1 border-4 border-black inline-block shadow-[4px_4px_0px_#000] w-max">👥 PESERTA</h2>
-                    <p class="font-bold text-2xl leading-relaxed">Perwakilan khusus yang diutus dari <span class="bg-[#ff3366] text-white px-2 py-1 border-2 border-black transform inline-block rotate-2 shadow-[2px_2px_0px_#000]">13 Sub-Departemen</span> yang berbeda di perusahaan. Siap untuk level-up kompetensi!</p>
+                    <p class="font-bold text-2xl leading-relaxed">Perwakilan khusus yang diutus dari <span class="bg-[#ff3366] text-white px-2 py-1 border-2 border-black transform inline-block rotate-2 shadow-[2px_2px_0px_#000]">13 Sub-Departemen</span> yang berbeda di ETD. Siap untuk level-up kompetensi!</p>
                 </div>
             </div>
 
@@ -298,6 +300,167 @@
                     <div class="avatar-card"><div class="avatar-img bg-[#ff3366]">👩🏻‍💻</div><div><h4 class="font-black text-lg leading-tight uppercase">Ibu Dhian</h4><span class="text-[0.65rem] font-bold bg-[#00e5ff] text-black px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Support Team</span></div></div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SLIDE 3B: DAFTAR PESERTA
+         ========================================== -->
+    <section class="slide-section" id="slide-peserta">
+        <div class="presentation-frame">
+            
+            <!-- Header -->
+            <header class="text-center mb-10 shrink-0 anim-wrapper">
+                <h1 class="font-comic text-4xl lg:text-6xl uppercase text-black bg-[#ffde59] px-8 py-2 border-4 border-black inline-block shadow-[8px_8px_0px_#000] drop-shadow-[2px_2px_0px_#fff] transform -rotate-1">
+                    DAFTAR PESERTA 🎮
+                </h1>
+                <p class="font-bold text-xl bg-black text-[#00e5ff] inline-block px-4 py-1 border-4 border-white mt-2 transform rotate-1 shadow-[4px_4px_0px_#ff3366]">
+                    Player Roster: Gamifikasi 2.0
+                </p>
+            </header>
+
+            <!-- Roster Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pb-6 shrink-0">
+                
+                <div class="anim-wrapper"><div class="brutal-box hover-comic bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#ffb3c6] text-black">TTOP</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Fanuel&backgroundColor=ffb3c6" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">FANUEL CALVIN W</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic-alt bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#a9def9] text-black">NTP</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Gabriela&backgroundColor=a9def9" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">GABRIELA FORTUNATA</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#d0f4de] text-black">PLD</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Javier&backgroundColor=d0f4de" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">JAVIER REYNATA</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic-alt bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#fcf6bd] text-black">GROOMI</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Jonathan&backgroundColor=fcf6bd" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">JONATHAN KEVIN ADRIAN</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#c8b6ff] text-black">TCDEV1</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Kharisma&backgroundColor=c8b6ff" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">KHARISMA WIDHI VALENZIA</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic-alt bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#ff914d] text-black">EAD</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Lydia&backgroundColor=ff914d" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">LYDIA ALICIA DOREA W.</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#c1ff72] text-black">TBO</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Ryan&backgroundColor=c1ff72" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">RYAN APRILYANTO LASMANA</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic-alt bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#00e5ff] text-black">MVPS</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Bintang&backgroundColor=00e5ff" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">SAMUEL BINTANG NUGROHO</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#ff3366] text-white">VPRO</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Vincent&backgroundColor=ff3366" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">SAMUEL VINCENTYO FANANDI</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic-alt bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#000000] text-white">IPL</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <!-- Background menggunakan abu-abu muda agar garis hitam robot tetap terlihat -->
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Toar&backgroundColor=e5e5e5" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">TOAR JOSHUA MARIO</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#ffde59] text-black">SS</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Vathea&backgroundColor=ffde59" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">VATHEA CLARESTA</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic-alt bg-white flex flex-col overflow-hidden">
+                    <div class="dept-badge bg-[#b49fcc] text-black">TCOM</div>
+                    <div class="p-3 flex items-center gap-3">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Wira&backgroundColor=b49fcc" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000] shrink-0">
+                        <p class="font-bold text-sm md:text-base leading-tight">WIRA PUTTANANDA</p>
+                    </div>
+                </div></div>
+
+                <div class="anim-wrapper"><div class="brutal-box hover-comic bg-white flex flex-col overflow-hidden border-4 !border-[#ff3366]">
+                    <div class="dept-badge bg-[#ff3366] text-white border-b-4 !border-[#ff3366] border-r-4">TCDEV2</div>
+                    <div class="p-3 flex items-center gap-3 bg-[#ffe5ec] relative">
+                        <div class="relative shrink-0">
+                            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Rindu&backgroundColor=ff3366" alt="Robot" class="w-10 h-10 md:w-12 md:h-12 border-2 border-black rounded-full shadow-[2px_2px_0px_#000]">
+                            <!-- Ikon khusus untuk menandakan peserta pengganti (swap) -->
+                            <span class="absolute -top-2 -right-2 text-sm bg-white rounded-full border-2 border-black shadow-[1px_1px_0px_#000] w-6 h-6 flex items-center justify-center">🔄</span>
+                        </div>
+                        <p class="font-bold text-sm md:text-base leading-tight text-[#ff3366]">RINDU MARITO PURBA</p>
+                    </div>
+                </div></div>
+
+            </div>
+
+            <!-- Notes Section (Mission Log) -->
+            <div class="anim-wrapper mt-4 mb-4 shrink-0">
+                <div class="brutal-box hover-comic bg-[#222] text-white p-5 md:p-6 relative">
+                    
+                    <h2 class="font-comic text-2xl md:text-3xl mb-4 bg-[#ff3366] text-white inline-block px-3 py-1 border-2 border-white transform -rotate-1">
+                        Catatan Khusus:
+                    </h2>
+                    
+                    <div class="flex flex-col gap-3">
+                        <!-- Note 1 -->
+                        <div class="flex gap-3 items-start">
+                            <span class="text-2xl leading-none">⚠️</span>
+                            <p class="font-bold text-sm md:text-base leading-relaxed">
+                                Adanya pertukaran peserta dari Subdept <span class="bg-[#ffde59] text-black px-1 border border-black">TCDEV2</span> (Pak Ujang digantikan oleh Rindu Marito Purba) dikarenakan sakit.
+                            </p>
+                        </div>
+                        
+                        <!-- Note 2 -->
+                        <div class="flex gap-3 items-start">
+                            <span class="text-2xl leading-none">🚷</span>
+                            <p class="font-bold text-sm md:text-base leading-relaxed">
+                                Subdept <span class="bg-[#00e5ff] text-black px-1 border border-black">Intens</span> tidak mengirimkan perwakilan karena PIC yang dijadwalkan sedang ada agenda cuti.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -348,7 +511,7 @@
                 <div class="anim-wrapper relative"><div class="brutal-box hover-comic bg-[#c1ff72] p-5 h-full flex flex-col justify-center"><div class="absolute -top-4 -left-4 font-comic bg-[#ff3366] text-white px-3 py-1 border-2 border-black transform -rotate-6 text-xl shadow-[4px_4px_0px_#000]">ALUR</div><div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2"><div class="bg-white border-4 border-black p-4 font-black text-center shadow-[4px_4px_0px_#000] w-full">MINI WORKSHOP<br>GAMIFIKASI 2.0</div><div class="text-4xl">⏩</div><div class="bg-[#00e5ff] border-4 border-black p-4 font-black text-center shadow-[4px_4px_0px_#000] w-full">TEST PRAKTIK<br>GAMIFIKASI 2.0</div></div></div></div>
                 <div class="anim-wrapper relative"><div class="brutal-box hover-comic bg-[#ffde59] p-5 h-full flex flex-col justify-center items-center"><div class="absolute -top-4 -right-4 font-comic bg-[#00e5ff] text-black px-3 py-1 border-2 border-black transform rotate-6 text-xl shadow-[4px_4px_0px_#000]">EVALUASI</div><div class="flex justify-center items-center gap-6 w-full"><div class="text-center"><div class="text-3xl font-black bg-white border-4 border-black px-3 py-1 shadow-[4px_4px_0px_#000] mb-2 transform -rotate-2">50%</div><span class="font-bold">POST TEST</span></div><div class="text-5xl font-comic">+</div><div class="text-center"><div class="text-3xl font-black bg-[#ff3366] text-white border-4 border-black px-3 py-1 shadow-[4px_4px_0px_#000] mb-2 transform rotate-2">50%</div><span class="font-bold">TEST PRAKTIK</span></div></div><div class="mt-4 w-full text-center bg-black text-white py-2 border-2 border-white font-comic text-2xl tracking-widest shadow-[4px_4px_0px_#ff3366]">🔥 MIN KELULUSAN: ≥ 70 🔥</div></div></div>
             </div>
-            <div class="mb-4 relative anim-wrapper shrink-0 text-center"><h2 class="font-comic text-3xl bg-white text-black px-6 py-2 border-4 border-black inline-block shadow-[6px_6px_0px_#00e5ff] transform rotate-1">📅 RUNDOWN MISI HARI INI</h2></div>
+            <div class="mb-4 relative anim-wrapper shrink-0 text-center"><h2 class="font-comic text-3xl bg-white text-black px-6 py-2 border-4 border-black inline-block shadow-[6px_6px_0px_#00e5ff] transform rotate-1">📅 RUNDOWN PELAKSANAAN</h2></div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8">
                 <div class="anim-wrapper"><div class="brutal-box bg-white p-4 h-full"><h3 class="font-comic text-2xl mb-4 bg-black text-white px-2 py-1 text-center border-2 border-black shadow-[3px_3px_0px_#ffde59]">LVL 1: THE KICKOFF 🚀</h3>
                     <div class="flex flex-col gap-3">
@@ -743,25 +906,32 @@
         // === MAIN LOGIC (SCROLL OBSERVER & MODALS) ===
         document.addEventListener("DOMContentLoaded", () => {
             
-            // 1. Two-Way Scroll Reveal Observer
+            // 1. Two-Way Scroll Reveal Observer (Anti-Glitch dengan Hysteresis)
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
+                    // MUNCUL: Jika elemen terlihat minimal 35% (max 65% tertutup) di layar
+                    // Atau untuk elemen berukuran besar, memicu jika setidaknya 30% dari tinggi layar terpenuhi
+                    if (entry.intersectionRatio >= 0.35 || (entry.isIntersecting && entry.intersectionRect.height > window.innerHeight * 0.3)) {
                         entry.target.classList.add('is-visible');
                         
-                        // Cek apakah elemen ini memuat chart
+                        // Cek apakah elemen ini memuat chart lalu di render
                         if(entry.target.closest('#slide-7')) renderPraCharts();
                         if(entry.target.closest('#slide-9')) renderEva2Charts();
                         if(entry.target.closest('#slide-10')) renderEva1Charts();
                         
-                    } else {
-                        // Hilangkan class saat keluar layar agar animasi diulang saat discroll lagi
+                    } 
+                    // MENGHILANG: HANYA jika elemen tertutup sangat banyak (> 85% tertutup / terlihat < 15%)
+                    // Jarak rasio antara 0.15 hingga 0.35 menciptakan "Zona Aman" murni,
+                    // sehingga animasi scale membesarnya tidak akan pernah memicu glitch/looping patah-patah.
+                    else if (entry.intersectionRatio < 0.15) {
                         entry.target.classList.remove('is-visible');
                     }
                 });
             }, {
-                threshold: 0.15, // Muncul saat 15% bagiannya terlihat
-                rootMargin: "0px 0px -20px 0px"
+                // Memantau setiap perubahan interval 5% (0.0, 0.05, 0.10, ... 1.0) 
+                // untuk mendeteksi pergerakan rasio dengan sangat presisi dan mulus.
+                threshold: Array.from({length: 21}, (_, i) => i * 0.05),
+                rootMargin: "0px 0px -5% 0px"
             });
             
             document.querySelectorAll('.anim-wrapper').forEach((el) => {
