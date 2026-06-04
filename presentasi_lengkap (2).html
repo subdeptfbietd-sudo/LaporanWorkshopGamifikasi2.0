@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Presentation: Workshop Gamifikasi 2.0</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* === GLOBAL SCROLLBAR & BODY === */
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23262626" stroke="%23ffffff" stroke-width="2"><path d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.42c.45 0 .67-.54.35-.85L5.5 3.21z"/></svg>'), auto !important;
+            background-color: #222; /* Default fallback */
+        }
+        ::-webkit-scrollbar { width: 16px; }
+        ::-webkit-scrollbar-track { background: #222; border-left: 4px solid #000; }
+        ::-webkit-scrollbar-thumb { background: #ff3366; border: 4px solid #000; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
+
+        .font-comic { font-family: 'Bangers', cursive; letter-spacing: 2px; }
+
+        /* === SECTION WRAPPERS (ISOLASI DESAIN ANTAR HALAMAN) === */
+        .sec-dark { background-color: #222; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 2rem 1rem; position: relative; }
+        .sec-pra-dashboard { background-color: #f4f0ea; background-image: radial-gradient(#000000 1px, transparent 1px); background-size: 20px 20px; padding: 4rem 2rem; min-height: 100vh; color: #000; }
+        .sec-eva1 { background-color: #f6f4eb; background-image: radial-gradient(rgba(38, 38, 38, 0.15) 2px, transparent 2px); background-size: 30px 30px; padding: 4rem 2rem; min-height: 100vh; position: relative; overflow-x: hidden; color: #262626; }
+        .sec-eva2 { background-color: #f4f4f0; background-image: radial-gradient(#111 1px, transparent 1px); background-size: 20px 20px; padding: 4rem 2rem; min-height: 100vh; color: #111; }
+
+        /* === PRESENTATION FRAME (UNTUK SLIDE 1-4 & 6) === */
+        .presentation-frame {
+            background-color: #f4f0ea;
+            background-image: radial-gradient(#000000 1px, transparent 1px);
+            background-size: 20px 20px;
+            width: 100%;
+            max-width: 95vw;
+            max-height: 95vh;
+            aspect-ratio: 16 / 9;
+            border: 8px solid #000;
+            box-shadow: 16px 16px 0px #000;
+            border-radius: 16px;
+            position: relative;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            color: #000; /* Reset color inside frame */
+        }
+        .presentation-frame::-webkit-scrollbar { width: 16px; }
+        .presentation-frame::-webkit-scrollbar-track { background: #f4f0ea; border-left: 4px solid #000; border-radius: 0 8px 8px 0; }
+        .presentation-frame::-webkit-scrollbar-thumb { background: #ffde59; border: 4px solid #000; border-radius: 8px; }
+
+        /* === NEO-BRUTALISM UTILITIES === */
+        .brutal-box { border: 4px solid #000; box-shadow: 6px 6px 0px #000; border-radius: 8px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; }
+        .brutal-box:hover { transform: translateY(-4px) translateX(-4px); box-shadow: 10px 10px 0px #000; z-index: 20; }
+        
+        .brutal-box-lg { border: 4px solid #000; box-shadow: 8px 8px 0px #000; border-radius: 12px; transition: transform 0.2s; position: relative; }
+        .brutal-box-lg:hover { transform: translateY(-4px); box-shadow: 12px 12px 0px #000; z-index: 20; }
+
+        .hover-comic:hover { transform: scale(1.03) translateY(-6px) rotate(-1deg); box-shadow: 12px 12px 0px #000; cursor: pointer; z-index: 20; }
+        .hover-comic-alt:hover { transform: scale(1.03) translateY(-4px) rotate(1deg); box-shadow: 10px 10px 0px #ff3366; cursor: pointer; z-index: 20; }
+        .hover-comic-target:hover { transform: scale(1.03) translateY(-4px) rotate(1deg); box-shadow: 10px 10px 0px #ff3366; cursor: pointer; z-index: 20; }
+
+        .comic-badge { position: absolute; font-family: 'Bangers', cursive; background-color: #000; color: #fff; padding: 4px 12px; border: 2px solid #fff; transform: rotate(-5deg); z-index: 10; box-shadow: 3px 3px 0px #ff3366; letter-spacing: 1px; }
+        .comic-pop { position: absolute; background-color: #ff3366; color: white; padding: 8px 16px; border: 3px solid black; box-shadow: 4px 4px 0 black; font-size: 1.2rem; z-index: 10; }
+        .level-badge { font-family: 'Bangers', cursive; background: #000; color: #ffde59; padding: 4px 12px; border: 2px solid #fff; box-shadow: 3px 3px 0px #ff3366; display: inline-block; transform: rotate(-2deg); font-size: 1.2rem; letter-spacing: 1px; }
+        .time-tag { font-family: 'Bangers', cursive; background: #000; color: #fff; padding: 2px 10px; border: 2px solid #fff; box-shadow: 2px 2px 0px #ff3366; transform: rotate(-3deg); display: inline-block; letter-spacing: 1px; white-space: nowrap; }
+        .step-badge { font-family: 'Bangers', cursive; background: #000; color: #fff; padding: 2px 8px; border: 2px solid #fff; transform: rotate(-3deg); display: inline-block; letter-spacing: 1px; box-shadow: 2px 2px 0px #ff3366; }
+
+        /* === ANIMATIONS === */
+        .anim-element { opacity: 0; transform: scale(0.7) translateY(50px) rotate(-5deg); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .pop-in { animation: comicPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes comicPop { 0% { opacity: 0; transform: scale(0.5) translateY(50px) rotate(-10deg); } 100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); } }
+        .pop-in-title { animation: dropDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes dropDown { 0% { opacity: 0; transform: translateY(-100px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* === SPECIFIC COMPONENTS CSS === */
+        /* Avatars (Overview) */
+        .avatar-card { display: flex; align-items: center; gap: 1rem; background: #fff; padding: 0.75rem; border: 3px solid #000; border-radius: 8px; box-shadow: 4px 4px 0px #000; margin-bottom: 0.75rem; transition: transform 0.1s; }
+        .avatar-card:hover { transform: translateX(4px); box-shadow: 2px 2px 0px #000; }
+        .avatar-img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #000; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
+
+        /* Dashboard Pra-Workshop Chat Bubbles */
+        .chat-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        .chat-msg { position: relative; padding: 1rem; border: 3px solid #000; border-radius: 12px; background: #fff; box-shadow: 4px 4px 0px #000; width: 90%; transition: transform 0.2s; }
+        .chat-msg:hover { transform: scale(1.02); }
+        .chat-msg.left { align-self: flex-start; border-bottom-left-radius: 0; }
+        .chat-msg.right { align-self: flex-end; border-bottom-right-radius: 0; background: #e0f2fe; }
+        .chat-msg.highlight { background: #ffde59; }
+        .chat-tag { font-size: 0.75rem; font-family: 'Bangers', cursive; letter-spacing: 1px; background: #000; color: #fff; padding: 2px 8px; position: absolute; top: -12px; left: -10px; border: 2px solid #fff; transform: rotate(-5deg); box-shadow: 2px 2px 0px #000; }
+        .chat-msg.right .chat-tag { left: auto; right: -10px; transform: rotate(5deg); background: #ff3366; }
+
+        /* Modals & Robots (Intisari) */
+        .robot-avatar { position: absolute; top: -25px; right: -20px; width: 70px; height: 70px; background: #fff; border: 3px solid #000; border-radius: 50%; box-shadow: 4px 4px 0px #000; z-index: 10; transition: transform 0.3s ease; }
+        .brutal-box:hover .robot-avatar { transform: scale(1.2) rotate(10deg); }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; cursor: pointer; }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease-out forwards; }
+        .modal-content { transform: scale(0.8) translateY(40px); opacity: 0; max-height: 90vh; overflow-y: auto; cursor: default; }
+        .modal-content::-webkit-scrollbar { width: 12px; }
+        .modal-content::-webkit-scrollbar-track { background: #f4f0ea; border-left: 3px solid #000; border-radius: 0 8px 8px 0; }
+        .modal-content::-webkit-scrollbar-thumb { background: #000; border: 3px solid #fff; border-radius: 8px; }
+        .modal-overlay.active .modal-content { animation: comicPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Evaluasi 1 Specific */
+        .floating-ornament { position: absolute; z-index: 0; opacity: 0.6; animation: float 4s ease-in-out infinite; }
+        .ornament-1 { top: 10%; left: 5%; width: 50px; fill: #fbcfe8; animation-delay: 0s; }
+        .ornament-2 { top: 40%; right: 5%; width: 60px; fill: #bae6fd; animation-delay: 1s; }
+        .ornament-3 { bottom: 20%; left: 8%; width: 40px; fill: #fde68a; animation-delay: 2s; }
+        @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        
+        .bubble-wrapper-eva { display: flex; flex-direction: column; margin-bottom: 35px; width: 100%; transition: transform 0.3s ease, opacity 0.5s ease; opacity: 0; transform: translateY(30px); }
+        .bubble-wrapper-eva.visible { opacity: 1; transform: translateY(0); }
+        .bubble-wrapper-eva:hover { transform: translateY(-5px) scale(1.02) !important; }
+        .bubble-left { align-items: flex-start; } .bubble-right { align-items: flex-end; }
+        .comic-bubble { border: 4px solid #262626; border-radius: 20px; padding: 15px 20px; font-size: 1.05rem; line-height: 1.5; font-weight: bold; position: relative; box-shadow: 5px 5px 0px rgba(38,38,38,0.2); max-width: 90%; }
+        .participant-name-eva { display: inline-block; margin-top: 10px; font-family: 'Bangers', cursive; font-size: 1.2rem; color: #262626; letter-spacing: 1px; opacity: 0.7; }
+        .bubble-left .participant-name-eva { margin-left: 10px; } .bubble-right .participant-name-eva { margin-right: 10px; text-align: right; }
+        
+        /* Tails for Eva 1 Bubbles */
+        .bubble-left .comic-bubble::before { content: ''; position: absolute; bottom: -20px; left: 25px; border-width: 20px 20px 0 0; border-style: solid; border-color: #262626 transparent transparent transparent; }
+        .bubble-left .comic-bubble::after { content: ''; position: absolute; bottom: -12px; left: 29px; border-width: 14px 14px 0 0; border-style: solid; }
+        .bubble-right .comic-bubble::before { content: ''; position: absolute; bottom: -20px; right: 25px; border-width: 20px 0 0 20px; border-style: solid; border-color: #262626 transparent transparent transparent; }
+        .bubble-right .comic-bubble::after { content: ''; position: absolute; bottom: -12px; right: 29px; border-width: 14px 0 0 14px; border-style: solid; }
+        
+        /* Print Button Eva 1 */
+        .btn-print { position: absolute; bottom: 30px; right: 30px; background-color: #fde68a; color: #262626; font-family: 'Bangers', cursive; font-size: 1.5rem; padding: 15px 25px; border: 4px solid #262626; box-shadow: 6px 6px 0px #262626; border-radius: 10px; z-index: 50; transition: all 0.2s ease; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .btn-print:hover { transform: translate(4px, 4px); box-shadow: 2px 2px 0px #262626; background-color: #bae6fd; }
+
+        /* Evaluasi 2 Specific */
+        .d2-metric { border: 4px solid #111; box-shadow: 6px 6px 0px #111; padding: 20px; text-align: center; background: #fff; position: relative; overflow: hidden; }
+        .d2-metric h3 { font-family: 'Bangers', cursive; font-size: 1.5rem; margin-top: 0; margin-bottom: 5px; }
+        .d2-metric .value { font-size: 3rem; font-weight: 700; margin: 0; }
+        .d2-chart-box { background-color: #fff; border: 5px solid #111; box-shadow: 10px 10px 0px #111; padding: 30px 20px 20px; position: relative; }
+        .d2-chart-title { font-family: 'Bangers', cursive; font-size: 1.6rem; text-align: center; border: 3px solid #111; display: inline-block; padding: 5px 20px; position: absolute; top: -20px; left: 20px; box-shadow: 4px 4px 0px #111; letter-spacing: 1px; }
+
+        @media print {
+            body { background-image: none !important; background-color: white !important; }
+            .sec-dark, .sec-pra-dashboard, .sec-eva1, .sec-eva2 { background: white !important; padding: 0 !important; }
+            .btn-print, .floating-ornament { display: none !important; }
+            .bubble-wrapper-eva { opacity: 1 !important; transform: none !important; page-break-inside: avoid; }
+            .presentation-frame { max-height: none !important; overflow: visible !important; border: none !important; box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==============================================
+         FILE 1: LATAR BELAKANG WORKSHOP
+         ============================================== -->
+    <section class="sec-dark" id="sec-1">
+        <div class="presentation-frame">
+            <!-- Header -->
+            <header class="text-center mb-6 anim-element" data-anim="title">
+                <div class="inline-block relative">
+                    <div class="absolute -top-4 -left-6 bg-[#ff3366] text-white font-comic text-xl px-3 py-1 border-2 border-black transform -rotate-12 shadow-[4px_4px_0px_#000] z-10 anim-element" data-anim="item">
+                        ZAAAP! ⚡
+                    </div>
+                    <h1 class="font-comic text-5xl lg:text-7xl uppercase text-black bg-[#ffde59] px-8 py-2 border-4 border-black shadow-[8px_8px_0px_#000] drop-shadow-[2px_2px_0px_#fff]">
+                        Latar Belakang
+                    </h1>
+                    <h2 class="font-bold text-xl lg:text-2xl mt-2 bg-white inline-block px-4 py-1 border-2 border-black">
+                        Workshop Gamifikasi 2.0 & AI
+                    </h2>
+                </div>
+            </header>
+
+            <!-- Layout Grid -->
+            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-max relative pb-4">
+                <div class="anim-element brutal-box bg-[#00e5ff] p-4 flex flex-col justify-center relative" data-anim="item">
+                    <span class="comic-badge -top-3 -left-3 !bg-[#ff3366]">#01</span>
+                    <div class="text-4xl mb-2">🎯</div>
+                    <p class="font-bold text-sm lg:text-lg leading-tight">Pembelajaran yang efektif memerlukan keterlibatan (engagement) peserta yang tinggi.</p>
+                </div>
+
+                <div class="anim-element brutal-box bg-white p-4 flex flex-col justify-center relative md:col-span-2 lg:col-span-2" data-anim="item">
+                    <span class="comic-badge -top-3 -left-3 !bg-[#c1ff72] !text-black !border-black">#02</span>
+                    <div class="flex items-center gap-4">
+                        <div class="text-6xl drop-shadow-[4px_4px_0px_#ff3366]">🎮</div>
+                        <p class="font-bold text-base lg:text-xl leading-snug">Gamifikasi menjadi salah satu metode yang <span class="bg-[#ffde59] px-1 border border-black">terbukti mampu</span> meningkatkan interaksi, motivasi, dan retensi pembelajaran.</p>
+                    </div>
+                </div>
+
+                <div class="anim-element brutal-box bg-[#ff3366] text-white p-4 flex flex-col justify-center relative" data-anim="item">
+                    <span class="comic-badge -top-3 -left-3 !bg-[#ffde59] !text-black !border-black">#03</span>
+                    <div class="text-4xl mb-2 drop-shadow-[2px_2px_0px_#000]">🧩</div>
+                    <p class="font-bold text-sm lg:text-lg leading-tight drop-shadow-[1px_1px_0px_#000]">Gamifikasi yang baik harus <u class="decoration-4 decoration-[#ffde59]">relevan</u> dengan materi yang dipelajari, bukan sekadar permainan kosong.</p>
+                </div>
+
+                <div class="anim-element brutal-box bg-[#c1ff72] p-4 flex flex-col justify-center relative" data-anim="item">
+                    <span class="comic-badge -top-3 -left-3 !bg-white !text-black !border-black">#04</span>
+                    <div class="text-4xl mb-2">🤖</div>
+                    <p class="font-bold text-sm lg:text-[1.05rem] leading-tight">Perkembangan <b>Artificial Intelligence (AI)</b> memungkinkan pembuatan gamifikasi lebih cepat, mudah, & tanpa coding kompleks!</p>
+                </div>
+
+                <div class="anim-element brutal-box bg-[#ffde59] p-4 flex flex-col justify-center relative border-8 border-black" data-anim="item">
+                    <span class="comic-badge -top-4 -right-4 !bg-[#00e5ff] !text-black !border-black transform rotate-12 text-xl">GOAL! 🚀</span>
+                    <p class="font-bold text-base lg:text-xl leading-snug text-center">ETD perlu meningkatkan kompetensi dalam memanfaatkan AI untuk menghasilkan media pembelajaran menarik di <span class="bg-black text-white px-2 py-1 transform -rotate-2 inline-block mt-1">LMS</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FILE 2: OVERVIEW WORKSHOP
+         ============================================== -->
+    <section class="sec-dark" id="sec-2">
+        <div class="presentation-frame">
+            <header class="anim-element brutal-box-lg bg-[#00e5ff] p-6 text-center mb-8 relative overflow-hidden shrink-0" data-anim="title">
+                <div class="comic-pop font-comic transform -rotate-12 -top-2 -left-2 !bg-[#ffde59] !text-black">CHAPTER 01</div>
+                <h1 class="font-comic text-4xl md:text-6xl mb-2 text-black uppercase tracking-wider drop-shadow-[2px_2px_0px_#fff]">Overview: Gamifikasi 2.0</h1>
+                <p class="text-xl font-bold bg-white inline-block px-4 py-1 border-2 border-black">Mempersiapkan Media Pembelajaran Interaktif Masa Depan</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 shrink-0">
+                <div class="anim-element brutal-box-lg bg-[#ff3366] text-white p-6 relative flex flex-col justify-center items-center" data-anim="item">
+                    <div class="comic-pop font-comic transform rotate-6 -top-3 -right-3 !bg-[#c1ff72] !text-black text-sm">MARK YOUR CALENDAR!</div>
+                    <div class="text-center w-full bg-black border-2 border-white p-3 mb-3 shadow-[4px_4px_0px_#fff]">
+                        <h3 class="font-comic text-2xl text-[#ffde59] tracking-widest">WAKTU</h3>
+                        <p class="font-black text-xl mt-1">28 MEI 2026</p>
+                    </div>
+                    <div class="text-center w-full bg-black border-2 border-white p-3 shadow-[4px_4px_0px_#fff]">
+                        <h3 class="font-comic text-2xl text-[#00e5ff] tracking-widest">LOKASI</h3>
+                        <p class="font-black text-xl mt-1">RUANG 1203</p>
+                    </div>
+                </div>
+
+                <div class="anim-element brutal-box-lg bg-[#ffde59] p-6 md:col-span-2 relative flex flex-col justify-center" data-anim="item">
+                    <div class="comic-pop font-comic transform -rotate-6 -bottom-3 -right-3 !bg-[#000] !text-white">JOIN THE BATTLE!</div>
+                    <h2 class="font-comic text-4xl mb-4 bg-white px-3 py-1 border-4 border-black inline-block shadow-[4px_4px_0px_#000] w-max">👥 PESERTA</h2>
+                    <p class="font-bold text-2xl leading-relaxed">Perwakilan khusus yang diutus dari <span class="bg-[#ff3366] text-white px-2 py-1 border-2 border-black transform inline-block rotate-2 shadow-[2px_2px_0px_#000]">13 Sub-Departemen</span> yang berbeda di perusahaan. Siap untuk level-up kompetensi!</p>
+                </div>
+            </div>
+
+            <div class="text-center mb-6 mt-4 shrink-0 anim-element" data-anim="item">
+                <h2 class="font-comic text-4xl bg-black text-white inline-block px-6 py-2 border-4 border-white shadow-[6px_6px_0px_#ff3366] transform -rotate-1">MEET THE SQUAD! ⚡</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-4">
+                <div class="anim-element brutal-box-lg bg-[#ff914d] p-4 flex flex-col" data-anim="item">
+                    <h3 class="font-comic text-2xl mb-4 text-center bg-white border-2 border-black py-1 shadow-[4px_4px_0px_#000]">🎙️ PEMATERI / MODERATOR</h3>
+                    <div class="avatar-card"><div class="avatar-img bg-[#ff3366]">👨🏻‍🏫</div><div><h4 class="font-black text-lg leading-tight uppercase">Bapak Fath</h4><span class="text-[0.65rem] font-bold bg-black text-[#ffde59] px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Expertise</span></div></div>
+                    <div class="avatar-card"><div class="avatar-img bg-[#00e5ff]">👨🏻‍💻</div><div><h4 class="font-black text-lg leading-tight uppercase">Bapak Yehezkiel</h4><span class="text-[0.65rem] font-bold bg-black text-[#ffde59] px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Expertise</span></div></div>
+                    <div class="avatar-card"><div class="avatar-img bg-[#ffde59]">👨🏻‍🎤</div><div><h4 class="font-black text-lg leading-tight uppercase">Bapak Erwin</h4><span class="text-[0.65rem] font-bold bg-black text-[#ffde59] px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Moderator / Host</span></div></div>
+                </div>
+
+                <div class="anim-element brutal-box-lg bg-[#c1ff72] p-4 flex flex-col" data-anim="item">
+                    <h3 class="font-comic text-2xl mb-4 text-center bg-white border-2 border-black py-1 shadow-[4px_4px_0px_#000]">📋 PANITIA UTAMA</h3>
+                    <div class="avatar-card"><div class="avatar-img bg-[#b49fcc]">👨🏻‍💼</div><div><h4 class="font-black text-lg leading-tight uppercase">Bapak Nanda</h4><span class="text-[0.65rem] font-bold bg-[#ff3366] text-white px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Event Organizer</span></div></div>
+                    <div class="avatar-card"><div class="avatar-img bg-[#ff3366]">👨🏻‍🔧</div><div><h4 class="font-black text-lg leading-tight uppercase">Bapak Putra</h4><span class="text-[0.65rem] font-bold bg-[#ff3366] text-white px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Event Organizer</span></div></div>
+                    <div class="avatar-card"><div class="avatar-img bg-[#00e5ff]">👩🏻‍💼</div><div><h4 class="font-black text-lg leading-tight uppercase">Ibu Atha</h4><span class="text-[0.65rem] font-bold bg-[#ff3366] text-white px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Event Organizer</span></div></div>
+                </div>
+
+                <div class="anim-element brutal-box-lg bg-[#b49fcc] p-4 flex flex-col" data-anim="item">
+                    <h3 class="font-comic text-2xl mb-4 text-center bg-white border-2 border-black py-1 shadow-[4px_4px_0px_#000]">🛠️ KONTRIBUTOR</h3>
+                    <div class="avatar-card"><div class="avatar-img bg-[#ffde59]">🦸🏻‍♂️</div><div><h4 class="font-black text-lg leading-tight uppercase">Bapak Hardiyanto</h4><span class="text-[0.65rem] font-bold bg-[#00e5ff] text-black px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Special Guess</span></div></div>
+                    <div class="avatar-card"><div class="avatar-img bg-[#c1ff72]">👨🏻‍🚀</div><div><h4 class="font-black text-lg leading-tight uppercase">Bapak Gensa</h4><span class="text-[0.65rem] font-bold bg-[#00e5ff] text-black px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Support Team</span></div></div>
+                    <div class="avatar-card"><div class="avatar-img bg-[#ff3366]">👩🏻‍💻</div><div><h4 class="font-black text-lg leading-tight uppercase">Ibu Dhian</h4><span class="text-[0.65rem] font-bold bg-[#00e5ff] text-black px-2 py-0.5 rounded-sm border border-black uppercase tracking-wider">Support Team</span></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FILE 3: TUJUAN DAN TARGET PEMBELAJARAN
+         ============================================== -->
+    <section class="sec-dark" id="sec-3">
+        <div class="presentation-frame">
+            <header class="text-center mb-10 anim-element" data-anim="title">
+                <h1 class="font-comic text-5xl lg:text-6xl uppercase text-black bg-[#c1ff72] px-8 py-2 border-4 border-black inline-block shadow-[8px_8px_0px_#000] drop-shadow-[2px_2px_0px_#fff] transform -rotate-1">Tujuan & Target Pembelajaran</h1>
+            </header>
+
+            <div class="mb-6 relative anim-element" data-anim="item">
+                <h2 class="font-comic text-3xl bg-black text-white px-4 py-1 border-2 border-white inline-block mb-4 shadow-[4px_4px_0px_#ff3366]">🎯 TUJUAN WORKSHOP</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div class="anim-element relative" data-anim="item"><div class="brutal-box hover-comic bg-[#00e5ff] p-5 relative"><span class="comic-badge -top-3 -left-3 !bg-[#ff3366]">#01</span><div class="text-4xl mb-3 mt-2">🧠</div><p class="font-bold text-lg leading-tight">Memberikan pemahaman mengenai konsep dan prinsip gamifikasi dalam pembelajaran.</p></div></div>
+                <div class="anim-element relative" data-anim="item"><div class="brutal-box hover-comic bg-white p-5 relative"><span class="comic-badge -top-3 -left-3 !bg-[#c1ff72] !text-black !border-black">#02</span><div class="text-4xl mb-3 mt-2">🛠️</div><p class="font-bold text-lg leading-tight">Meningkatkan kemampuan tim ETD dalam merancang game yang selaras dengan tujuan pembelajaran.</p></div></div>
+                <div class="anim-element relative" data-anim="item"><div class="brutal-box hover-comic bg-[#ff914d] p-5 relative"><span class="comic-badge -top-3 -left-3 !bg-white !text-black !border-black">#03</span><div class="text-4xl mb-3 mt-2">🤖</div><p class="font-bold text-lg leading-tight">Mengenalkan pemanfaatan AI sebagai alat bantu pembuatan gamifikasi secara cepat dan efektif.</p></div></div>
+                <div class="anim-element relative" data-anim="item"><div class="brutal-box hover-comic bg-[#b49fcc] p-5 relative"><span class="comic-badge -top-3 -left-3 !bg-[#ffde59] !text-black !border-black">#04</span><div class="text-4xl mb-3 mt-2">💻</div><p class="font-bold text-lg leading-tight">Mendukung pengembangan konten LMS yang lebih interaktif dan menarik bagi peserta training.</p></div></div>
+            </div>
+
+            <div class="mb-6 relative anim-element" data-anim="item">
+                <h2 class="font-comic text-3xl bg-white text-black px-4 py-1 border-4 border-black inline-block mb-4 shadow-[4px_4px_0px_#00e5ff]">📈 TARGET PEMBELAJARAN</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
+                <div class="anim-element" data-anim="item"><div class="brutal-box hover-comic-target bg-[#ffde59] p-5 flex flex-col justify-between gap-4 border-4 border-black"><div class="flex items-center gap-3"><span class="text-4xl">🎲</span><h3 class="font-bold text-xl leading-tight">Pengenalan Elemen Gamifikasi</h3></div><div class="text-right"><span class="level-badge">LVL: C2 MEMAHAMI</span></div></div></div>
+                <div class="anim-element" data-anim="item"><div class="brutal-box hover-comic-target bg-[#ff3366] text-white p-5 flex flex-col justify-between gap-4 border-4 border-black"><div class="flex items-center gap-3"><span class="text-4xl">🚀</span><h3 class="font-bold text-xl leading-tight">Menciptakan Gamifikasi dengan AI</h3></div><div class="text-right"><span class="level-badge !bg-white !text-black !shadow-[3px_3px_0px_#00e5ff]">LVL: C3 MENGAPLIKASIKAN</span></div></div></div>
+                <div class="anim-element" data-anim="item"><div class="brutal-box hover-comic-target bg-white p-5 flex flex-col justify-between gap-4 border-4 border-black"><div class="flex items-center gap-3"><span class="text-4xl">🐙</span><h3 class="font-bold text-xl leading-tight">Penggunaan Github</h3></div><div class="text-right"><span class="level-badge !bg-[#c1ff72] !text-black !shadow-[3px_3px_0px_#000]">LVL: C3 MENGAPLIKASIKAN</span></div></div></div>
+                <div class="anim-element" data-anim="item"><div class="brutal-box hover-comic-target bg-[#00e5ff] p-5 flex flex-col justify-between gap-4 border-4 border-black"><div class="flex items-center gap-3"><span class="text-4xl">🗄️</span><h3 class="font-bold text-xl leading-tight">Pembuatan Database</h3></div><div class="text-right"><span class="level-badge !bg-black !text-white !shadow-[3px_3px_0px_#ff3366]">LVL: C3 MENGAPLIKASIKAN</span></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FILE 4: RUNDOWN EVALUASI
+         ============================================== -->
+    <section class="sec-dark" id="sec-4">
+        <div class="presentation-frame">
+            <header class="text-center mb-8 anim-element shrink-0" data-anim="title">
+                <h1 class="font-comic text-4xl lg:text-5xl uppercase text-white bg-black px-8 py-2 border-4 border-white inline-block shadow-[8px_8px_0px_#ff3366] transform -rotate-1">Alur & Quest Board! 🗺️</h1>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 shrink-0">
+                <div class="anim-element relative" data-anim="item">
+                    <div class="brutal-box hover-comic bg-[#c1ff72] p-5 h-full flex flex-col justify-center">
+                        <div class="absolute -top-4 -left-4 font-comic bg-[#ff3366] text-white px-3 py-1 border-2 border-black transform -rotate-6 text-xl shadow-[4px_4px_0px_#000]">ALUR</div>
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2">
+                            <div class="bg-white border-4 border-black p-4 font-black text-center shadow-[4px_4px_0px_#000] w-full">MINI WORKSHOP<br>GAMIFIKASI 2.0</div>
+                            <div class="text-4xl">⏩</div>
+                            <div class="bg-[#00e5ff] border-4 border-black p-4 font-black text-center shadow-[4px_4px_0px_#000] w-full">TEST PRAKTIK<br>GAMIFIKASI 2.0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anim-element relative" data-anim="item">
+                    <div class="brutal-box hover-comic bg-[#ffde59] p-5 h-full flex flex-col justify-center items-center">
+                        <div class="absolute -top-4 -right-4 font-comic bg-[#00e5ff] text-black px-3 py-1 border-2 border-black transform rotate-6 text-xl shadow-[4px_4px_0px_#000]">EVALUASI</div>
+                        <div class="flex justify-center items-center gap-6 w-full">
+                            <div class="text-center"><div class="text-3xl font-black bg-white border-4 border-black px-3 py-1 shadow-[4px_4px_0px_#000] mb-2 transform -rotate-2">50%</div><span class="font-bold">POST TEST</span></div>
+                            <div class="text-5xl font-comic">+</div>
+                            <div class="text-center"><div class="text-3xl font-black bg-[#ff3366] text-white border-4 border-black px-3 py-1 shadow-[4px_4px_0px_#000] mb-2 transform rotate-2">50%</div><span class="font-bold">TEST PRAKTIK</span></div>
+                        </div>
+                        <div class="mt-4 w-full text-center bg-black text-white py-2 border-2 border-white font-comic text-2xl tracking-widest shadow-[4px_4px_0px_#ff3366]">🔥 MIN KELULUSAN: ≥ 70 🔥</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4 relative anim-element shrink-0 text-center" data-anim="item">
+                <h2 class="font-comic text-3xl bg-white text-black px-6 py-2 border-4 border-black inline-block shadow-[6px_6px_0px_#00e5ff] transform rotate-1">📅 RUNDOWN MISI HARI INI</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8">
+                <div class="anim-element" data-anim="item"><div class="brutal-box bg-white p-4 h-full"><h3 class="font-comic text-2xl mb-4 bg-black text-white px-2 py-1 text-center border-2 border-black shadow-[3px_3px_0px_#ffde59]">LVL 1: THE KICKOFF 🚀</h3>
+                    <div class="flex flex-col gap-3">
+                        <div class="hover-comic-alt bg-[#f4f0ea] border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag w-max">08.00 - 08.20</span><p class="font-bold text-sm leading-tight">Opening, Sambutan, & Target Training</p></div>
+                        <div class="hover-comic-alt bg-[#ff3366] text-white border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag !bg-white !text-black !border-black !shadow-[2px_2px_0px_#00e5ff] w-max">08.20 - 08.45</span><p class="font-bold text-sm leading-tight">📝 PRE TEST</p></div>
+                        <div class="hover-comic-alt bg-[#f4f0ea] border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag w-max">08.45 - 09.00</span><p class="font-bold text-sm leading-tight">Pengantar & Elemen Gamifikasi</p></div>
+                        <div class="hover-comic-alt bg-[#c1ff72] border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag w-max">09.00 - 10.00</span><p class="font-bold text-sm leading-tight">🤖 Materi & Praktik: Gamifikasi Instan dengan AI (HTML)</p></div>
+                    </div>
+                </div></div>
+
+                <div class="anim-element" data-anim="item"><div class="brutal-box bg-white p-4 h-full relative">
+                    <div class="absolute -top-3 -right-3 font-comic bg-[#ff914d] text-black px-2 py-1 border-2 border-black shadow-[3px_3px_0px_#000] transform rotate-6 z-10 text-sm">☕ 10.00 (BREAK 15')</div>
+                    <h3 class="font-comic text-2xl mb-4 bg-black text-white px-2 py-1 text-center border-2 border-black shadow-[3px_3px_0px_#00e5ff] mt-2">LVL 2: CORE TECH ⚙️</h3>
+                    <div class="flex flex-col gap-3">
+                        <div class="hover-comic-alt bg-[#b49fcc] border-2 border-black p-2 flex items-center justify-between"><p class="font-bold text-sm">🧊 Ice Breaking 1</p><span class="time-tag text-xs">10.15 - 10.25</span></div>
+                        <div class="hover-comic-alt bg-[#f4f0ea] border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag w-max">10.25 - 11.00</span><p class="font-bold text-sm leading-tight">🐙 Materi & Praktik: Implementasi Github di LMS</p></div>
+                        <div class="hover-comic-alt bg-[#f4f0ea] border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag w-max">11.00 - 12.00</span><p class="font-bold text-sm leading-tight">📊 Materi & Praktik: Integrasi Gamifikasi G-Spreadsheet</p></div>
+                        <div class="hover-comic-alt bg-[#ffde59] border-2 border-black p-3 text-center mt-2 shadow-[4px_4px_0px_#000]"><h4 class="font-comic text-xl">🍱 12.00 - 13.00</h4><p class="font-black text-sm">ISTIRAHAT PANJANG</p></div>
+                    </div>
+                </div></div>
+
+                <div class="anim-element" data-anim="item"><div class="brutal-box bg-white p-4 h-full"><h3 class="font-comic text-2xl mb-4 bg-black text-white px-2 py-1 text-center border-2 border-black shadow-[3px_3px_0px_#ff3366]">BOSS STAGE! 👾</h3>
+                    <div class="flex flex-col gap-3">
+                        <div class="hover-comic-alt bg-[#b49fcc] border-2 border-black p-2 flex items-center justify-between"><p class="font-bold text-sm">🧊 Ice Breaking 2</p><span class="time-tag text-xs">13.00 - 13.10</span></div>
+                        <div class="hover-comic-alt bg-[#00e5ff] border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag w-max">13.10 - 14.00</span><p class="font-bold text-sm leading-tight">⚔️ PRAKTIK FINAL: Pembuatan Gamifikasi AI + Github & Review</p></div>
+                        <div class="hover-comic-alt bg-[#ff3366] text-white border-2 border-black p-2 flex flex-col gap-1"><span class="time-tag !bg-white !text-black !border-black !shadow-[2px_2px_0px_#ffde59] w-max">14.00 - 14.25</span><p class="font-bold text-sm leading-tight">📝 POST TEST</p></div>
+                        <div class="hover-comic-alt bg-black text-white border-2 border-white p-2 flex flex-col gap-1"><span class="time-tag !bg-[#ffde59] !text-black !border-black w-max">14.25 - 14.30</span><p class="font-bold text-sm leading-tight">🏁 CLOSING / FINISH</p></div>
+                    </div>
+                </div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FILE 5: DASHBOARD PRA-WORKSHOP
+         ============================================== -->
+    <section class="sec-pra-dashboard" id="sec-5">
+        <div class="max-w-7xl mx-auto">
+            <header class="brutal-box bg-[#ffde59] p-6 md:p-10 text-center mb-10 relative overflow-hidden anim-element" data-anim="title">
+                <div class="comic-pop font-comic text-2xl -top-2 -right-4 transform rotate-12">BAM!</div>
+                <h1 class="font-comic text-5xl md:text-7xl mb-2 uppercase text-black drop-shadow-[3px_3px_0px_#fff]">Report: Pra-Workshop Gamifikasi 2.0</h1>
+                <p class="text-xl md:text-2xl font-bold bg-white inline-block px-4 py-1 border-2 border-black mt-2">Menganalisa Kesiapan & Ekspektasi Peserta</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div class="brutal-box bg-[#00e5ff] p-6 flex flex-col justify-center items-center relative anim-element" data-anim="item">
+                    <h2 class="font-comic text-3xl mb-4 bg-white px-3 py-1 border-2 border-black w-full text-center">Tingkat Semangat🔥</h2>
+                    <div class="text-7xl font-comic text-black drop-shadow-[4px_4px_0px_#fff] mt-4 mb-2">94.7%</div>
+                    <p class="font-bold text-center mt-2 text-lg">Rata-rata antusiasme 12 peserta!</p>
+                    <div class="w-full bg-white border-4 border-black h-8 mt-4 relative overflow-hidden"><div class="bg-[#ff3366] h-full" style="width: 95%;"></div></div>
+                </div>
+
+                <div class="brutal-box bg-[#c1ff72] p-6 relative anim-element" data-anim="item">
+                    <h2 class="font-comic text-3xl mb-4 bg-white px-3 py-1 border-2 border-black inline-block">Penggunaan AI 🤖</h2>
+                    <div class="relative h-64 w-full flex justify-center mt-2"><canvas id="aiChart"></canvas></div>
+                    <p class="font-bold text-center mt-4 bg-white border-2 border-black p-2">Mayoritas sudah terbiasa dengan AI!</p>
+                </div>
+
+                <div class="brutal-box bg-[#ff914d] p-6 relative anim-element" data-anim="item">
+                    <h2 class="font-comic text-3xl mb-4 bg-white px-3 py-1 border-2 border-black inline-block">Pengalaman Game 🎮</h2>
+                    <div class="relative h-64 w-full flex justify-center mt-2"><canvas id="expChart"></canvas></div>
+                    <p class="font-bold text-center mt-4 bg-white border-2 border-black p-2">Butuh panduan dari dasar!</p>
+                </div>
+
+                <div class="brutal-box bg-white p-6 md:col-span-2 relative anim-element" data-anim="item">
+                    <div class="comic-pop bg-[#00e5ff] !text-black !transform !-rotate-12 !left-[-15px] !right-auto">POW!</div>
+                    <h2 class="font-comic text-3xl mb-4 bg-[#ff3366] text-white px-3 py-1 border-2 border-black inline-block">Kendala Utama (Pain Points) 💥</h2>
+                    <div class="relative h-64 w-full mt-2"><canvas id="kendalaChart"></canvas></div>
+                </div>
+
+                <div class="brutal-box bg-[#ffde59] p-6 relative anim-element" data-anim="item">
+                    <h2 class="font-comic text-3xl mb-4 bg-white px-3 py-1 border-2 border-black inline-block">Platform Dipakai 🎯</h2>
+                    <div class="relative h-64 w-full flex justify-center mt-2"><canvas id="platformChart"></canvas></div>
+                    <p class="font-bold text-center mt-4 bg-white border-2 border-black p-2 text-sm">Data dari peserta yg berpengalaman</p>
+                </div>
+            </div>
+
+            <!-- Deep Dive / Chat Section -->
+            <div class="text-center mb-10 anim-element" data-anim="item">
+                <h2 class="font-comic text-4xl md:text-5xl bg-black text-white inline-block px-6 py-2 border-4 border-white shadow-[8px_8px_0px_#ff3366] transform -rotate-2">🗣️ Deep Dive: Suara Hati Peserta!</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="brutal-box bg-[#b49fcc] p-6 anim-element" data-anim="item">
+                    <h3 class="font-comic text-2xl mb-8 bg-white px-3 py-1 border-2 border-black inline-block shadow-[4px_4px_0px_#000]">Fitur Idaman (Belum Ada) 🛠️</h3>
+                    <div class="chat-container">
+                        <div class="chat-msg left"><span class="chat-tag">Peserta (A)</span><p class="font-bold">"Integrasi langsung ke sistem LMS internal perusahaan tanpa ribet setup API."</p></div>
+                        <div class="chat-msg right"><span class="chat-tag">Peserta (B)</span><p class="font-bold">"Kustomisasi karakter 3D atau avatar peserta biar lebih kerasa personal touch-nya."</p></div>
+                        <div class="chat-msg left"><span class="chat-tag">Peserta (C)</span><p class="font-bold">"Analytics real-time yang detail banget per peserta, bukan cuma hasil skor akhir aja."</p></div>
+                    </div>
+                </div>
+                <div class="brutal-box bg-[#ff914d] p-6 anim-element" data-anim="item">
+                    <h3 class="font-comic text-2xl mb-8 bg-white px-3 py-1 border-2 border-black inline-block shadow-[4px_4px_0px_#000]">Unsur WAJIB Asik! 🌟</h3>
+                    <div class="chat-container">
+                        <div class="chat-msg left"><span class="chat-tag">Peserta (D)</span><p class="font-bold">"Leaderboard, Interactive & Konsep yang bukan hanya sekadar pilihan ganda (pilgan)."</p></div>
+                        <div class="chat-msg right"><span class="chat-tag">Peserta (E)</span><p class="font-bold">"Tampilan UI/UX menarik, mode gamifikasi yang tidak itu-itu saja."</p></div>
+                        <div class="chat-msg left highlight"><span class="chat-tag">Peserta (F)</span><p class="font-bold">"Menantang agar tidak membosankan dan bikin antusias terus!"</p></div>
+                    </div>
+                </div>
+                <div class="brutal-box bg-[#c1ff72] p-6 anim-element" data-anim="item">
+                    <h3 class="font-comic text-2xl mb-8 bg-white px-3 py-1 border-2 border-black inline-block shadow-[4px_4px_0px_#000]">Harapan Workshop 🚀</h3>
+                    <div class="chat-container">
+                        <div class="chat-msg left highlight"><span class="chat-tag">Peserta (G)</span><p class="font-bold text-xl text-[#ff3366]">"Bisa menjadi Master AI!"</p></div>
+                        <div class="chat-msg right"><span class="chat-tag">Peserta (H)</span><p class="font-bold">"Bisa membuat gamifikasi proper dalam waktu 10 menit saja."</p></div>
+                        <div class="chat-msg left"><span class="chat-tag">Peserta (J)</span><p class="font-bold">"Bisa bikin game yang menarik, interaktif, dan challenging untuk training divisi masing-masing."</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="mt-10 mb-5 text-center anim-element" data-anim="item">
+                <p class="font-bold text-xl bg-black text-white inline-block px-6 py-3 border-4 border-white shadow-[6px_6px_0px_#ff3366]">Siap untuk membuat gamifikasi proper dalam waktu 10 menit! 🚀</p>
+            </footer>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FILE 6: INTISARI MATERI
+         ============================================== -->
+    <section class="sec-dark" id="sec-6">
+        <div class="presentation-frame">
+            <header class="text-center mb-10 anim-element shrink-0" data-anim="title">
+                <h1 class="font-comic text-4xl lg:text-6xl uppercase text-white bg-[#ff3366] px-8 py-2 border-4 border-black inline-block shadow-[8px_8px_0px_#000] drop-shadow-[2px_2px_0px_#fff] transform -rotate-1">INTISARI MATERI 📚</h1>
+                <p class="font-bold text-xl bg-white border-4 border-black inline-block px-4 py-1 mt-2 transform rotate-1 shadow-[4px_4px_0px_#000]">Cheat Sheet Gamifikasi 2.0</p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 shrink-0">
+                <div class="anim-element" data-anim="item"><div id="trigger-elemen" class="brutal-box hover-comic bg-[#00e5ff] p-5 h-full flex flex-col pt-8 relative cursor-pointer group">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Element&backgroundColor=ffde59" class="robot-avatar" alt="Robot Sesi 1">
+                    <div class="absolute -top-4 -left-4 font-comic bg-black text-white px-4 py-1 border-2 border-white transform -rotate-6 text-2xl shadow-[4px_4px_0px_#ff3366]">SESI 1A</div>
+                    <h2 class="font-black text-xl mb-3 bg-white px-2 py-1 border-2 border-black inline-block w-max">Elemen Ideal Gamifikasi</h2>
+                    <span class="absolute top-3 right-20 bg-[#ff3366] text-white text-xs font-black px-2 py-1 border-2 border-black transform rotate-3 z-10 animate-pulse shadow-[2px_2px_0px_#000] group-hover:scale-110 transition-transform">🖱️ KLIK DETAIL!</span>
+                    <p class="font-bold text-sm mb-4">Komponen wajib dalam meracik game pembelajaran:</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-white border-2 border-black px-3 py-1 font-bold shadow-[2px_2px_0px_#000] transform -rotate-1 hover:scale-110 transition-transform">⭐ Poin</span>
+                        <span class="bg-white border-2 border-black px-3 py-1 font-bold shadow-[2px_2px_0px_#000] transform rotate-2 hover:scale-110 transition-transform">🛡️ Badge</span>
+                        <span class="bg-[#ffde59] border-2 border-black px-3 py-1 font-bold shadow-[2px_2px_0px_#000] transform -rotate-2 hover:scale-110 transition-transform">🏆 Leaderboard</span>
+                        <span class="bg-[#ff3366] text-white border-2 border-black px-3 py-1 font-bold shadow-[2px_2px_0px_#000] transform rotate-1 hover:scale-110 transition-transform">⚔️ Challenge</span>
+                        <span class="bg-black text-[#c1ff72] border-2 border-white px-3 py-1 font-bold shadow-[2px_2px_0px_#000] transform -rotate-3 hover:scale-110 transition-transform">📈 Level</span>
+                    </div>
+                </div></div>
+
+                <div class="anim-element" data-anim="item"><div id="trigger-journey" class="brutal-box hover-comic-alt bg-[#ffde59] p-5 h-full flex flex-col pt-8 relative cursor-pointer group">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Journey&backgroundColor=00e5ff" class="robot-avatar" alt="Robot Journey">
+                    <div class="absolute -top-4 -left-4 font-comic bg-black text-white px-4 py-1 border-2 border-white transform rotate-3 text-2xl shadow-[4px_4px_0px_#c1ff72]">SESI 1B</div>
+                    <h2 class="font-black text-xl mb-3 bg-white px-2 py-1 border-2 border-black inline-block w-max">Player Journey</h2>
+                    <span class="absolute top-3 right-20 bg-[#00e5ff] text-black text-xs font-black px-2 py-1 border-2 border-black transform -rotate-3 z-10 animate-pulse shadow-[2px_2px_0px_#000] group-hover:scale-110 transition-transform">🖱️ KLIK DETAIL!</span>
+                    <p class="font-bold text-sm mb-3">Alur standar 2.0 yang harus dialami pemain dari awal hingga akhir:</p>
+                    <div class="flex flex-col gap-2">
+                        <div class="bg-white border-2 border-black p-2 flex gap-3 items-center"><span class="font-comic text-2xl text-[#ff3366]">1</span><p class="text-sm font-bold leading-tight"><span class="bg-[#00e5ff] px-1 border border-black">Gateway & Mission Brief</span>: Landing zone, isi data, dan terima misi.</p></div>
+                        <div class="text-center font-black text-xl leading-none">⬇</div>
+                        <div class="bg-white border-2 border-black p-2 flex gap-3 items-center"><span class="font-comic text-2xl text-[#ff3366]">2</span><p class="text-sm font-bold leading-tight"><span class="bg-[#c1ff72] px-1 border border-black">Core Execution</span>: Medan simulasi, interaksi LMS, & umpan balik sistem.</p></div>
+                        <div class="text-center font-black text-xl leading-none">⬇</div>
+                        <div class="bg-black text-white border-2 border-black p-2 flex gap-3 items-center"><span class="font-comic text-2xl text-[#ffde59]">3</span><p class="text-sm font-bold leading-tight"><span class="bg-[#ff3366] text-white px-1 border border-white">Post-Action Debrief</span>: Batu loncatan agar pemain mengulang.</p></div>
+                    </div>
+                </div></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 shrink-0">
+                <div class="anim-element" data-anim="item"><div class="brutal-box hover-comic bg-[#c1ff72] p-5 h-full pt-8 relative">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Prompt&backgroundColor=ff3366" class="robot-avatar" alt="Robot Prompt">
+                    <div class="absolute -top-4 -left-4 font-comic bg-black text-white px-4 py-1 border-2 border-white transform -rotate-2 text-2xl shadow-[4px_4px_0px_#00e5ff]">SESI 2</div>
+                    <h2 class="font-black text-xl mb-2 bg-white px-2 py-1 border-2 border-black inline-block w-max">Standarisasi Prompt (10 Menit)</h2>
+                    <p class="font-bold text-sm mb-4 leading-tight">Ubah blueprint materi menjadi gamifikasi instan via AI!</p>
+                    <div class="flex flex-col gap-3">
+                        <div class="bg-white p-3 border-2 border-black border-dashed"><span class="step-badge mb-1">TAHAP 1</span><p class="text-sm font-bold">Meminta AI untuk menentukan <span class="text-[#ff3366]">Sinopsis/Logika</span> permainan.</p></div>
+                        <div class="bg-white p-3 border-2 border-black border-dashed"><span class="step-badge mb-1 !bg-[#00e5ff] !text-black !shadow-[2px_2px_0px_#000]">TAHAP 2</span><p class="text-sm font-bold">Eksekusi AI untuk menyusun kode/skrip <span class="text-[#00e5ff]">Gamifikasi HTML</span>.</p></div>
+                    </div>
+                </div></div>
+
+                <div class="anim-element" data-anim="item"><div class="brutal-box hover-comic-alt bg-[#b49fcc] p-5 h-full pt-8 relative flex flex-col justify-center">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Git&backgroundColor=c1ff72" class="robot-avatar" alt="Robot Git">
+                    <div class="absolute -top-4 -left-4 font-comic bg-black text-white px-4 py-1 border-2 border-white transform rotate-4 text-2xl shadow-[4px_4px_0px_#ffde59]">SESI 3</div>
+                    <h2 class="font-black text-xl mb-3 bg-white px-2 py-1 border-2 border-black inline-block w-max">Repository Github 🐙</h2>
+                    <div class="bg-white border-4 border-black p-4 shadow-[4px_4px_0px_#000]">
+                        <p class="font-bold text-sm leading-relaxed mb-2">Karena platform LMS saat ini belum mendukung native HTML, kita butuh <span class="bg-[#ffde59] px-1 border border-black">Github</span>.</p>
+                        <p class="font-bold text-sm leading-relaxed">Game HTML akan di-host di Github sehingga menghasilkan <strong>External Link</strong> yang bisa ditanamkan ke dalam Learning Plan!</p>
+                    </div>
+                </div></div>
+            </div>
+
+            <div class="mb-4 shrink-0">
+                <div class="anim-element w-full" data-anim="item"><div class="brutal-box hover-comic bg-[#ff914d] p-5 pt-8 relative">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Data&backgroundColor=b49fcc" class="robot-avatar" alt="Robot Database">
+                    <div class="absolute -top-4 -left-4 font-comic bg-black text-white px-4 py-1 border-2 border-white transform -rotate-1 text-2xl shadow-[4px_4px_0px_#fff]">SESI 4</div>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-1">
+                            <h2 class="font-black text-xl mb-3 bg-white px-2 py-1 border-2 border-black inline-block w-max">Integrasi Database 📊</h2>
+                            <p class="font-bold text-sm leading-relaxed mb-2 bg-white border-2 border-black p-2"><strong>Problem:</strong> Platform LMS belum mendukung monitoring akses materi/game.<br><strong>Solusi:</strong> Gunakan <span class="bg-[#c1ff72] px-1 border border-black">Google Sheets</span> & <span class="bg-[#00e5ff] px-1 border border-black">Google Apps Script</span> untuk eksekusi penarikan data!</p>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-comic text-xl mb-2 bg-black text-white px-2 py-1 inline-block">3 Tahap Standarisasi Prompt Database:</h3>
+                            <div class="flex flex-col gap-2">
+                                <div class="bg-white border-2 border-black px-3 py-2 flex items-center gap-3"><span class="font-black text-xl text-[#ff3366]">01</span><p class="text-sm font-bold leading-tight">Minta AI analisa header database dari data game.</p></div>
+                                <div class="bg-white border-2 border-black px-3 py-2 flex items-center gap-3"><span class="font-black text-xl text-[#00e5ff]">02</span><p class="text-sm font-bold leading-tight">Eksekusi AI susun <span class="underline">Javascript di Google Apps Script</span>.</p></div>
+                                <div class="bg-white border-2 border-black px-3 py-2 flex items-center gap-3"><span class="font-black text-xl text-[#c1ff72]">03</span><p class="text-sm font-bold leading-tight">Menanamkan Javascript ke dalam Gamifikasi HTML.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals for Section 6 (Terdiam di luar flow tapi absolute overlay ke viewport) -->
+    <div id="modal-elemen" class="modal-overlay">
+        <div class="modal-content bg-white w-full max-w-2xl border-8 border-black p-6 rounded-xl shadow-[16px_16px_0px_#00e5ff] relative" onclick="event.stopPropagation()">
+            <button class="close-btn absolute -top-6 -right-6 bg-[#ff3366] text-white font-black text-2xl w-12 h-12 border-4 border-black rounded-full shadow-[4px_4px_0px_#000] hover:scale-110 transition-transform flex items-center justify-center">X</button>
+            <h2 class="font-comic text-3xl md:text-4xl mb-6 bg-[#00e5ff] inline-block px-4 py-2 border-4 border-black shadow-[4px_4px_0px_#000] transform -rotate-2 text-black uppercase">Detail Elemen Gamifikasi 🎮</h2>
+            <div class="flex flex-col gap-3 font-bold text-black">
+                <div class="bg-[#f4f0ea] border-4 border-black p-3 flex gap-4 items-center"><span class="text-3xl">⭐</span><p><span class="bg-white px-2 border-2 border-black inline-block transform -rotate-1 shadow-[2px_2px_0px_#000] mr-2">Poin</span> Digunakan untuk menghitung skor, prestasi, atau reward peserta.</p></div>
+                <div class="bg-[#f4f0ea] border-4 border-black p-3 flex gap-4 items-center"><span class="text-3xl">🛡️</span><p><span class="bg-white px-2 border-2 border-black inline-block transform rotate-1 shadow-[2px_2px_0px_#000] mr-2">Badge</span> Digunakan sebagai pencapaian tertentu dalam aktivitas.</p></div>
+                <div class="bg-[#f4f0ea] border-4 border-black p-3 flex gap-4 items-center"><span class="text-3xl">🏆</span><p><span class="bg-[#ffde59] px-2 border-2 border-black inline-block transform -rotate-1 shadow-[2px_2px_0px_#000] mr-2">Leaderboard</span> Digunakan untuk menciptakan elemen kompetisi di antara peserta.</p></div>
+                <div class="bg-[#f4f0ea] border-4 border-black p-3 flex gap-4 items-center"><span class="text-3xl">⚔️</span><p><span class="bg-[#ff3366] text-white px-2 border-2 border-black inline-block transform rotate-1 shadow-[2px_2px_0px_#000] mr-2">Challenge</span> Digunakan untuk meningkatkan motivasi dengan memberikan tugas atau tujuan yang harus dicapai.</p></div>
+                <div class="bg-[#f4f0ea] border-4 border-black p-3 flex gap-4 items-center"><span class="text-3xl">📈</span><p><span class="bg-black text-[#c1ff72] px-2 border-2 border-white inline-block transform -rotate-1 shadow-[2px_2px_0px_#000] mr-2">Level</span> Digunakan untuk menandai kemajuan peserta dari satu fase ke fase berikutnya.</p></div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-journey" class="modal-overlay">
+        <div class="modal-content bg-white w-full max-w-4xl border-8 border-black p-6 md:p-8 rounded-xl shadow-[16px_16px_0px_#ffde59] relative" onclick="event.stopPropagation()">
+            <button class="close-btn absolute -top-6 -right-6 bg-[#00e5ff] text-black font-black text-2xl w-12 h-12 border-4 border-black rounded-full shadow-[4px_4px_0px_#000] hover:scale-110 transition-transform flex items-center justify-center">X</button>
+            <h2 class="font-comic text-3xl md:text-4xl mb-8 bg-[#ffde59] inline-block px-4 py-2 border-4 border-black shadow-[4px_4px_0px_#000] transform rotate-1 text-black uppercase">Detail Player Journey 🗺️</h2>
+            <div class="flex flex-col gap-8 text-black">
+                <div class="bg-white border-4 border-black p-4 relative shadow-[4px_4px_0px_#000]">
+                    <span class="font-comic text-2xl absolute -top-5 -left-4 bg-[#ff3366] text-white px-4 py-1 border-2 border-black transform -rotate-2">1. Gateway & Mission Briefing</span>
+                    <ul class="mt-4 list-disc list-inside font-bold text-sm md:text-base space-y-3 leading-relaxed">
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Profile Setup:</span> Pemain membangun identitas, di sini kita bisa meminta data Nama dan NIK sebagai kebutuhan database.</li>
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Mission Objective:</span> Pemain diberi tahu dengan jelas apa yang harus mereka selamatkan, pecahkan, atau kuasai.</li>
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">The Hook:</span> Fase ini harus membangkitkan rasa penasaran dan memberikan alasan kuat (why) mengapa mereka harus menyelesaikan gamifikasi.</li>
+                    </ul>
+                </div>
+                <div class="bg-white border-4 border-black p-4 relative shadow-[4px_4px_0px_#000]">
+                    <span class="font-comic text-2xl absolute -top-5 -left-4 bg-[#00e5ff] text-black px-4 py-1 border-2 border-black transform rotate-1">2. Core Execution</span>
+                    <ul class="mt-4 list-disc list-inside font-bold text-sm md:text-base space-y-3 leading-relaxed">
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Interactive:</span> Terjadi ketika pemain merasa keputusan mereka berdampak, antarmuka yang tidak kaku, adanya keterlibatan sensori pemain.</li>
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Real-time Feedback:</span> Pemain bisa langsung melihat indikator progres (seperti XP yang bertambah, koin yang jatuh, dsb).</li>
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Dynamic Difficulty:</span> Permainan menyesuaikan tingkat kesulitan agar pemain tidak bosan.</li>
+                    </ul>
+                </div>
+                <div class="bg-white border-4 border-black p-4 relative shadow-[4px_4px_0px_#000]">
+                    <span class="font-comic text-2xl absolute -top-5 -left-4 bg-black text-[#c1ff72] px-4 py-1 border-2 border-white transform -rotate-1">3. Post-Action Debrief</span>
+                    <ul class="mt-4 list-disc list-inside font-bold text-sm md:text-base space-y-3 leading-relaxed">
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Selebrasi Visual:</span> Menampilkan statistik visual (skor/chart) yang representatif terhadap permainan, beserta compliment/reinforcement.</li>
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Analisis Taktis:</span> Berikan penjelasan analisis permainan: akurasi, kecepatan menjawab, ketekunan, dsb. Ataupun evaluasi tanpa menghakimi.</li>
+                        <li><span class="bg-[#f4f0ea] px-2 py-0.5 border border-black inline-block">Call To Action:</span> Ajak pemain untuk mengulang permainan atau melanjutkan misi selanjutnya.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         FILE 8: EVALUASI TAHAP 1
+         ============================================== -->
+    <section class="sec-eva1" id="sec-7">
+        <svg class="floating-ornament ornament-1" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" stroke="#262626" stroke-width="4"/></svg>
+        <svg class="floating-ornament ornament-2" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" stroke="#262626" stroke-width="4"/></svg>
+        <svg class="floating-ornament ornament-3" viewBox="0 0 100 100"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" stroke="#262626" stroke-width="4"/></svg>
+
+        <button class="btn-print" onclick="window.print()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Cetak Laporan
+        </button>
+
+        <div class="max-w-6xl mx-auto anim-element" data-anim="item">
+            <div class="text-center mb-10 p-8 bg-white border-[5px] border-[#262626] shadow-[10px_10px_0px_rgba(38,38,38,0.8)] relative rounded-lg">
+                <div class="absolute -top-5 -right-5 bg-[#bbf7d0] border-4 border-[#262626] font-comic text-xl p-3 rounded-full w-20 h-20 flex items-center justify-center transform rotate-12 shadow-[5px_5px_0px_#262626]">EVA 1</div>
+                <h1 class="font-comic text-4xl md:text-5xl uppercase text-black drop-shadow-[2px_2px_0px_#fde68a]">Evaluasi Tahap 1</h1>
+                <h2 class="font-bold text-xl mt-2">Workshop Gamifikasi 2.0</h2>
+            </div>
+
+            <!-- Chart Evaluasi 1 -->
+            <div class="bg-white border-[5px] border-[#262626] shadow-[12px_12px_0px_rgba(38,38,38,0.8)] p-10 pt-16 mb-16 relative rounded-lg">
+                <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-[#fde68a] border-4 border-[#262626] font-comic text-2xl px-8 py-1 shadow-[5px_5px_0px_#262626] rounded">Grafik Rata-rata Penilaian</div>
+                <div style="height: 350px; width: 100%;"><canvas id="eva1Chart"></canvas></div>
+            </div>
+
+            <!-- Bubble Comments -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="bg-white border-[5px] border-[#262626] p-6 shadow-[10px_10px_0px_rgba(38,38,38,0.8)] relative rounded-lg col-materi">
+                    <div class="text-center"><h3 class="font-comic text-2xl -mt-10 border-4 border-[#262626] px-4 py-1 inline-block shadow-[5px_5px_0px_#262626] bg-[#fbcfe8] rounded">MATERI</h3></div>
+                    <div class="bubble-wrapper-eva bubble-left mt-4"><div class="comic-bubble">Materi baik, joss, mantap dapat dimengerti dengan sangat baik!</div><div class="participant-name-eva">👤 Peserta A</div></div>
+                    <div class="bubble-wrapper-eva bubble-right"><div class="comic-bubble">Materi yang disampaikan mudah untuk dipahami, hanya saja bagian GAS (Google Apps Script) terkendala karena sempat error di 1 akun sampai mencoba akun lainnya.</div><div class="participant-name-eva">👤 Peserta B</div></div>
+                    <div class="bubble-wrapper-eva bubble-left"><div class="comic-bubble">Materi okee mudah dimengerti dan sangat bermanfaat untuk masa depan.</div><div class="participant-name-eva">👤 Peserta C</div></div>
+                </div>
+
+                <div class="bg-white border-[5px] border-[#262626] p-6 shadow-[10px_10px_0px_rgba(38,38,38,0.8)] relative rounded-lg col-pelaksanaan">
+                    <div class="text-center"><h3 class="font-comic text-2xl -mt-10 border-4 border-[#262626] px-4 py-1 inline-block shadow-[5px_5px_0px_#262626] bg-[#bae6fd] rounded">PELAKSANAAN</h3></div>
+                    <div class="bubble-wrapper-eva bubble-left mt-4"><div class="comic-bubble">Waktunya pas. Pembagian waktu antara training, isitrahat, dan games pas.</div><div class="participant-name-eva">👤 Peserta D</div></div>
+                    <div class="bubble-wrapper-eva bubble-right"><div class="comic-bubble">Waktu pas, malah saya selesai lebih cepat.</div><div class="participant-name-eva">👤 Peserta E</div></div>
+                    <div class="bubble-wrapper-eva bubble-left"><div class="comic-bubble">Waktu untuk praktik di akhir masih kurang, jdi peserta masih kurang ngulik.</div><div class="participant-name-eva">👤 Peserta F</div></div>
+                </div>
+
+                <div class="bg-white border-[5px] border-[#262626] p-6 shadow-[10px_10px_0px_rgba(38,38,38,0.8)] relative rounded-lg col-trainer">
+                    <div class="text-center"><h3 class="font-comic text-2xl -mt-10 border-4 border-[#262626] px-4 py-1 inline-block shadow-[5px_5px_0px_#262626] bg-[#fde68a] rounded">TRAINER</h3></div>
+                    <div class="bubble-wrapper-eva bubble-left mt-4"><div class="comic-bubble">Trainer membangun suasana kelas untuk fokus dengan agenda yg berjalan, walau ada kendala saat demo program di masing-masing laptop, namun sdh lancar.</div><div class="participant-name-eva">👤 Peserta G</div></div>
+                    <div class="bubble-wrapper-eva bubble-right"><div class="comic-bubble">Trainer menjelaskan dengan baik, namun ketika ada kendala secara langsung masih belum maksimal tapi sudah luar biasa!</div><div class="participant-name-eva">👤 Peserta H</div></div>
+                    <div class="bubble-wrapper-eva bubble-left"><div class="comic-bubble">Trainer OK, menjelaskan menarik, walaupun diakhir lebih baik langsung praktik daripada dijelasin langkah2nya.</div><div class="participant-name-eva">👤 Peserta I</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         FILE 7: EVALUASI TAHAP 2 (DASHBOARD)
+         ============================================== -->
+    <section class="sec-eva2" id="sec-8">
+        <div class="max-w-7xl mx-auto anim-element" data-anim="item">
+            <div class="text-center mb-10 p-6 bg-white border-[5px] border-[#111] shadow-[10px_10px_0px_#111] transform -rotate-1">
+                <h1 class="font-comic text-4xl md:text-5xl uppercase text-black drop-shadow-[3px_3px_0px_#ffd900]">Evaluasi Tahap 2 Workshop Gamifikasi 2.0</h1>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+                <div class="d2-metric bg-[#ff90e8]"><h3>Rata Pre-Test</h3><p class="value" id="valPre">0</p><p class="text-sm font-bold mt-2">Peserta Aktif</p></div>
+                <div class="d2-metric bg-[#90f4ff]"><h3>Rata Post-Test</h3><p class="value" id="valPost">0</p><p class="text-sm font-bold mt-2">Peserta Aktif</p></div>
+                <div class="d2-metric bg-[#90ff90]"><h3>Rata Praktik</h3><p class="value" id="valPraktik">0</p><p class="text-sm font-bold mt-2">Gamifikasi</p></div>
+                <div class="d2-metric bg-[#ffd900]"><h3>Rata Total</h3><p class="value" id="valTotal">0</p><p class="text-sm font-bold mt-2">Nilai Akhir</p></div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Kiri: Donut Chart -->
+                <div class="d2-chart-box">
+                    <div class="d2-chart-title bg-[#90ff90]">Tingkat Kelulusan</div>
+                    <div class="max-w-[250px] mx-auto mt-4"><canvas id="kelulusanChart"></canvas></div>
+                    <div class="text-center font-bold text-sm mt-6 border-2 border-dashed border-black p-2 bg-gray-100">13 Lulus | 1 Tidak Hadir (Sakit)</div>
+                </div>
+
+                <!-- Kanan: Total Nilai -->
+                <div class="d2-chart-box md:col-span-2">
+                    <div class="d2-chart-title bg-[#ffd900]">Total Nilai Akhir (Peringkat)</div>
+                    <div class="h-64 mt-4 w-full"><canvas id="totalChart"></canvas></div>
+                </div>
+
+                <!-- Pre-Test -->
+                <div class="d2-chart-box md:col-span-1 lg:col-span-1">
+                    <div class="d2-chart-title bg-[#ff90e8]">Grafik Pre-Test</div>
+                    <div class="h-64 mt-4 w-full"><canvas id="preTestChart"></canvas></div>
+                </div>
+
+                <!-- Post-Test -->
+                <div class="d2-chart-box md:col-span-2 lg:col-span-2">
+                    <div class="d2-chart-title bg-[#90f4ff]">Grafik Post-Test</div>
+                    <div class="h-64 mt-4 w-full"><canvas id="postTestChart"></canvas></div>
+                </div>
+
+                <!-- Praktik Bawah Full -->
+                <div class="d2-chart-box md:col-span-3">
+                    <div class="d2-chart-title bg-[#90ff90]">Nilai Praktik Gamifikasi</div>
+                    <div class="h-64 mt-4 w-full"><canvas id="praktikChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         SCRIPT: Scroll Observer, Modal & Chart.js Logic
+         ============================================== -->
+    <script>
+        // Setup Global Font untuk Chart.js
+        Chart.defaults.font.family = "'Space Grotesk', sans-serif";
+        Chart.defaults.color = '#111';
+        Chart.defaults.font.weight = 'bold';
+        Chart.defaults.font.size = 13;
+
+        // Flags to prevent re-rendering charts
+        const chartsRendered = { pra: false, eva1: false, eva2: false };
+
+        // === FUNGSI CHART PRA-WORKSHOP (SEC 5) ===
+        function renderPraCharts() {
+            if(chartsRendered.pra) return;
+            new Chart(document.getElementById('aiChart'), { type: 'pie', data: { labels: ['Sering', 'Sesekali'], datasets: [{ data: [9, 3], backgroundColor: ['#ffde59', '#ff3366'], borderColor: '#000', borderWidth: 4, hoverOffset: 10 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 14 } } } } } });
+            new Chart(document.getElementById('expChart'), { type: 'doughnut', data: { labels: ['Belum Pernah', 'Pernah'], datasets: [{ data: [8, 4], backgroundColor: ['#b49fcc', '#c1ff72'], borderColor: '#000', borderWidth: 4, hoverOffset: 10 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 14 } } } } } });
+            new Chart(document.getElementById('kendalaChart'), { type: 'bar', data: { labels: ['Susah Cari Ide', 'Bikin Aset Lama', 'Biaya Langganan', 'Integrasi Sistem'], datasets: [{ label: 'Jumlah Sebutan', data: [5, 4, 2, 1], backgroundColor: ['#ffde59', '#00e5ff', '#ff3366', '#c1ff72'], borderColor: '#000', borderWidth: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: '#000', drawBorder: true }, ticks: { stepSize: 1 }, border: { width: 4, color: '#000' } }, y: { grid: { display: false }, border: { width: 4, color: '#000' } } }, plugins: { legend: { display: false } } } });
+            new Chart(document.getElementById('platformChart'), { type: 'bar', data: { labels: ['Kahoot', 'Quizizz', 'Wordwall', 'Custom'], datasets: [{ label: 'Jumlah Pengguna', data: [3, 2, 1, 1], backgroundColor: ['#ff3366', '#00e5ff', '#b49fcc', '#ffffff'], borderColor: '#000', borderWidth: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#000', drawBorder: true }, border: { width: 4, color: '#000' } }, x: { grid: { display: false }, border: { width: 4, color: '#000' } } }, plugins: { legend: { display: false } } } });
+            chartsRendered.pra = true;
+        }
+
+        // === FUNGSI CHART EVALUASI 1 (SEC 7) ===
+        function renderEva1Charts() {
+            if(chartsRendered.eva1) return;
+            const topLabelsPlugin = {
+                id: 'topLabelsPlugin',
+                afterDatasetsDraw(chart) {
+                    const { ctx } = chart;
+                    chart.data.datasets.forEach((dataset, i) => {
+                        chart.getDatasetMeta(i).data.forEach((bar, index) => {
+                            const dataValue = dataset.data[index];
+                            ctx.save(); ctx.font = "bold 28px 'Bangers', cursive"; ctx.fillStyle = '#262626'; ctx.textAlign = 'center';
+                            ctx.fillText(dataValue, bar.x, bar.y - 12); ctx.restore();
+                        });
+                    });
+                }
+            };
+            new Chart(document.getElementById('eva1Chart'), {
+                type: 'bar',
+                data: { labels: ['MATERI', 'PELAKSANAAN', 'TRAINER'], datasets: [{ label: 'Nilai Evaluasi', data: [9.76, 9.73, 9.74], backgroundColor: ['#fbcfe8', '#bae6fd', '#fde68a'], borderColor: '#262626', borderWidth: 4, borderRadius: 5 }] },
+                plugins: [topLabelsPlugin],
+                options: { responsive: true, maintainAspectRatio: false, animation: { duration: 1500, easing: 'easeOutElastic' }, layout: { padding: { top: 30 } }, scales: { y: { min: 9.0, max: 10.0, grid: { color: 'rgba(38,38,38,0.2)', lineWidth: 2, borderDash: [5, 5] }, ticks: { font: { size: 14 } } }, x: { grid: { display: false }, ticks: { font: { family: 'Bangers', size: 18, letterSpacing: 1 } } } }, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#262626', titleFont: { family: 'Bangers', size: 18 }, bodyFont: { size: 14 }, padding: 12, cornerRadius: 5, borderColor: '#fff', borderWidth: 2 } } }
+            });
+            chartsRendered.eva1 = true;
+        }
+
+        // === FUNGSI CHART EVALUASI 2 (SEC 8) ===
+        function renderEva2Charts() {
+            if(chartsRendered.eva2) return;
+            const labels = ["FANUEL", "GABRIELA", "JAVIER", "JONATHAN", "KHARISMA", "LYDIA", "RYAN", "SAMUEL B", "SAMUEL V", "TOAR", "UJANG", "VATHEA", "WIRA", "RINDU"];
+            const rawPre = [5.0, 5.5, 4.5, 3.5, 6.0, 2.0, 3.0, 2.0, 6.5, 5.0, 0.0, 3.5, 6.0, 6.0];
+            const rawPost = [9.5, 8.5, 10.0, 9.5, 9.5, 10.0, 9.0, 9.5, 10.0, 9.0, 0.0, 9.5, 10.0, 10.0];
+            const rawPrak = [9.38, 10.0, 10.0, 10.0, 8.75, 10.0, 9.38, 10.0, 10.0, 10.0, 0.0, 10.0, 8.75, 8.75];
+            const rawTot = [9.44, 9.25, 10.0, 9.75, 9.13, 10.0, 9.19, 9.75, 10.0, 9.5, 0.0, 9.75, 9.38, 9.38];
+
+            const getAvg = arr => { const v = arr.filter(x => x > 0); return (v.reduce((a,b)=>a+b,0) / v.length); };
+            const avgPre = getAvg(rawPre), avgPost = getAvg(rawPost), avgPrak = getAvg(rawPrak), avgTot = getAvg(rawTot);
+
+            document.getElementById('valPre').innerText = avgPre.toFixed(2); document.getElementById('valPost').innerText = avgPost.toFixed(2);
+            document.getElementById('valPraktik').innerText = avgPrak.toFixed(2); document.getElementById('valTotal').innerText = avgTot.toFixed(2);
+
+            const hoverInt = { mode: 'index', intersect: false };
+            const custTT = { callbacks: { label: (ctx) => ctx.raw === 0 ? " Peserta Sakit" : ` ${ctx.dataset.label}: ${ctx.raw}` }, backgroundColor: '#111', titleFont: { family: 'Bangers', size: 16 }, padding: 10, cornerRadius: 0, borderColor: '#fff', borderWidth: 2 };
+
+            new Chart(document.getElementById('kelulusanChart'), { type: 'doughnut', data: { labels: ['Lulus', 'Tidak Hadir'], datasets: [{ data: [13, 1], backgroundColor: ['#90ff90', '#ff3366'], borderColor: '#111', borderWidth: 4 }] }, options: { responsive: true, plugins: { legend: { position: 'bottom' }, tooltip: custTT }, cutout: '50%' }});
+
+            let sortData = labels.map((n, i) => ({ name: n, total: rawTot[i] })).sort((a,b) => b.total - a.total);
+            new Chart(document.getElementById('totalChart'), { type: 'bar', data: { labels: sortData.map(d=>d.name), datasets: [{ type: 'line', label: `Rata-rata (${avgTot.toFixed(2)})`, data: Array(sortData.length).fill(avgTot), borderColor: '#ff3366', borderWidth: 3, borderDash: [8,6], pointRadius: 0, fill: false }, { type: 'bar', label: 'Total Nilai', data: sortData.map(d=>d.total), backgroundColor: '#ffd900', borderColor: '#111', borderWidth: 3 }] }, options: { responsive: true, maintainAspectRatio: false, interaction: hoverInt, scales: { y: { beginAtZero: true, max: 10, grid: { color: '#111' } }, x: { grid: { display: false } } }, plugins: { tooltip: custTT } }});
+            
+            new Chart(document.getElementById('preTestChart'), { type: 'bar', data: { labels: labels, datasets: [{ type: 'line', label: 'Avg', data: Array(labels.length).fill(avgPre), borderColor: '#ff3366', borderWidth: 3, borderDash: [8,6], pointRadius: 0 }, { type: 'bar', label: 'Pre-Test', data: rawPre, backgroundColor: '#ff90e8', borderColor: '#111', borderWidth: 3 }] }, options: { responsive: true, maintainAspectRatio: false, interaction: hoverInt, scales: { y: { max: 10, grid: { color: '#111' } }, x: { grid: { display: false } } }, plugins: { tooltip: custTT } }});
+            new Chart(document.getElementById('postTestChart'), { type: 'bar', data: { labels: labels, datasets: [{ type: 'line', label: 'Avg', data: Array(labels.length).fill(avgPost), borderColor: '#ff3366', borderWidth: 3, borderDash: [8,6], pointRadius: 0 }, { type: 'bar', label: 'Post-Test', data: rawPost, backgroundColor: '#90f4ff', borderColor: '#111', borderWidth: 3 }] }, options: { responsive: true, maintainAspectRatio: false, interaction: hoverInt, scales: { y: { max: 10, grid: { color: '#111' } }, x: { grid: { display: false } } }, plugins: { tooltip: custTT } }});
+            new Chart(document.getElementById('praktikChart'), { type: 'bar', data: { labels: labels, datasets: [{ type: 'line', label: 'Avg', data: Array(labels.length).fill(avgPrak), borderColor: '#ff3366', borderWidth: 3, borderDash: [8,6], pointRadius: 0 }, { type: 'bar', label: 'Praktik', data: rawPrak, backgroundColor: '#90ff90', borderColor: '#111', borderWidth: 3 }] }, options: { responsive: true, maintainAspectRatio: false, interaction: hoverInt, scales: { y: { max: 10, grid: { color: '#111' } }, x: { grid: { display: false } } }, plugins: { tooltip: custTT } }});
+            
+            chartsRendered.eva2 = true;
+        }
+
+        // === INTERSECTION OBSERVER ===
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 1. Generic Animations (Pop-in)
+                        const animElements = entry.target.querySelectorAll('.anim-element');
+                        animElements.forEach((el, index) => {
+                            setTimeout(() => {
+                                if (el.dataset.anim === 'title') el.classList.add('pop-in-title');
+                                else el.classList.add('pop-in');
+                            }, index * 150);
+                        });
+
+                        // 2. Chat/Bubble Animations (Eva 1)
+                        const bubbles = entry.target.querySelectorAll('.bubble-wrapper-eva');
+                        bubbles.forEach((el, index) => {
+                            setTimeout(() => el.classList.add('visible'), 300 + (index * 150));
+                        });
+
+                        // 3. Render Charts Based on Section
+                        if (entry.target.id === 'sec-5') renderPraCharts();
+                        if (entry.target.id === 'sec-7') renderEva1Charts();
+                        if (entry.target.id === 'sec-8') renderEva2Charts();
+
+                        obs.unobserve(entry.target); // Animasi dan render cukup sekali
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('section').forEach(sec => observer.observe(sec));
+
+            // === MODAL LOGIC (SEC 6) ===
+            const mElemen = document.getElementById('modal-elemen');
+            const mJourney = document.getElementById('modal-journey');
+            
+            document.getElementById('trigger-elemen')?.addEventListener('click', () => mElemen.classList.add('active'));
+            document.getElementById('trigger-journey')?.addEventListener('click', () => mJourney.classList.add('active'));
+
+            [mElemen, mJourney].forEach(modal => {
+                if(modal) {
+                    modal.addEventListener('click', () => modal.classList.remove('active'));
+                    modal.querySelector('.close-btn').addEventListener('click', (e) => { e.stopPropagation(); modal.classList.remove('active'); });
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if(e.key === "Escape") { mElemen?.classList.remove('active'); mJourney?.classList.remove('active'); }
+            });
+        });
+    </script>
+</body>
+</html>
